@@ -9,26 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Setter
 @Getter
-public class ArticleType {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class ArticleType extends BaseType{
 
-    @Column(nullable = false, unique = true)
-    private String name_uz;
-
-    @Column(nullable = false, unique = true)
-    private String name_ru;
-
-    @Column(nullable = false, unique = true)
-    private String name_en;
-
-    @Column(nullable = false)
-    private Boolean visible;
-
-    @Column(nullable = false)
-    private LocalDateTime createdDate;
-
-    @Column(nullable = false)
-    private Integer orderNumber;
 }

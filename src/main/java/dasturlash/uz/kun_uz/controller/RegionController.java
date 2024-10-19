@@ -35,7 +35,7 @@ public class RegionController {
     public ResponseEntity<RegionDTO> update(@PathVariable Integer id, @RequestBody RegionDTO regionDTO) {
         return ResponseEntity.ok(regionService.update(id, regionDTO));
     }
-    @PutMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Integer id) {
         return ResponseEntity.ok(regionService.delete(id));
     }

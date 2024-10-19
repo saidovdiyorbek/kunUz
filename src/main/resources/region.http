@@ -1,0 +1,13 @@
+POST localhost:8080/region
+Content-Type: application/json
+
+{
+  "name_uz": "Toshkent",
+  "name_ru": "Ташкент",
+  "name_en": "Tashkent",
+  "orderNumber": 1,
+  "visible": true
+}
+###
+GET localhost:8080/region
+

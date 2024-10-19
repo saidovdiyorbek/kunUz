@@ -27,6 +27,8 @@ public class ArticleTypeService {
         articleType.setName_ru(articleTypeDTO.getName_ru());
         articleType.setName_uz(articleTypeDTO.getName_uz());
         articleType.setOrderNumber(articleTypeDTO.getOrderNumber());
+        articleType.setVisible(articleTypeDTO.getVisible());
+        articleType.setCreatedDate(LocalDateTime.now());
         articleTypeRepository.save(articleType);
 
         articleTypeDTO.setId(articleType.getId());

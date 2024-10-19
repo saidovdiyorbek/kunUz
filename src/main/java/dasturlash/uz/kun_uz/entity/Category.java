@@ -1,14 +1,15 @@
 package dasturlash.uz.kun_uz.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Setter
 @Getter
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Region extends BaseType{
+public class Category extends BaseType{
+
 }

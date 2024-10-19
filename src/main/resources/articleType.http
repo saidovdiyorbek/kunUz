@@ -1,0 +1,14 @@
+POST localhost:8080/articleType
+Content-Type: application/json
+
+{
+  "name_uz": "Dolzarb xabarlar",
+  "name_ru": "Актуальные новости",
+  "name_en": "Actual news",
+  "orderNumber": 1,
+  "visible": true
+
+}
+
+###
+GET localhost:8080/articleType
