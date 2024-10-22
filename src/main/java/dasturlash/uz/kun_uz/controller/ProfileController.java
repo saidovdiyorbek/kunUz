@@ -5,6 +5,7 @@ import dasturlash.uz.kun_uz.service.ProfileService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.convert.PeriodUnit;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,5 +41,11 @@ public class ProfileController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ProfileDTO> delete(@PathVariable Integer id) {
         return ResponseEntity.ok(profileService.delete(id));
+    }
+
+    @GetMapping("/getPagination")
+    public ResponseEntity<Page<ProfileDTO>> getPagination(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                          @RequestParam(value = "size", defaultValue = "10")int size){
+        return ResponseEntity.ok(profileService.pagination(page, size));
     }
 }

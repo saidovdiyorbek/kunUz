@@ -43,9 +43,30 @@ public class ArticleTypeService {
         }
         return articleTypeDTOS;
     }
+    
+    public ArticleTypeDTO getById(Integer id) {
+        ArticleType articleType = get(id);
+        return toDTO(articleType);
+    }
+
+    public ArticleTypeDTO update(Integer id, ArticleTypeDTO articleTypeDTO) {
+        ArticleType articleType = get(id);
+
+        articleType.setName_uz(articleTypeDTO.getName_uz());
+        articleType.setName_ru(articleTypeDTO.getName_ru());
+        articleType.setName_en(articleTypeDTO.getName_en());
+        articleType.setOrderNumber(articleTypeDTO.getOrderNumber());
+
+        articleTypeRepository.save(articleType);
+        return toDTO(articleType);
+    }
 
 
-
+    public Boolean delete(Integer id) {
+        ArticleType articleType = get(id);
+        articleTypeRepository.deleteById(id);
+        return true;
+    }
     public ArticleTypeDTO toDTO(ArticleType articleType) {
         ArticleTypeDTO articleTypeDTO = new ArticleTypeDTO();
 
@@ -57,39 +78,9 @@ public class ArticleTypeService {
         articleTypeDTO.setCreatedDate(articleType.getCreatedDate());
         return articleTypeDTO;
     }
-
-    public ArticleTypeDTO getById(Integer id) {
-        Optional<ArticleType> byId = articleTypeRepository.findById(id);
-        if (!byId.isPresent()) {
-            throw new AppBadException("Article type with id " + id + " not found");
-        }
-        return toDTO(byId.get());
-    }
-
-    public ArticleTypeDTO update(Integer id, ArticleTypeDTO articleTypeDTO) {
-        Optional<ArticleType> byId = articleTypeRepository.findById(id);
-        if (!byId.isPresent()) {
-            throw new AppBadException("Article type with id " + id + " not found");
-        }
-        ArticleType articleType = byId.get();
-        articleType.setName_uz(articleTypeDTO.getName_uz());
-        articleType.setName_ru(articleTypeDTO.getName_ru());
-        articleType.setName_en(articleTypeDTO.getName_en());
-        articleType.setOrderNumber(articleTypeDTO.getOrderNumber());
-        articleType.setVisible(articleTypeDTO.getVisible());
-        articleTypeRepository.save(articleType);
-
-        articleTypeDTO.setId(articleType.getId());
-        articleTypeDTO.setCreatedDate(articleType.getCreatedDate());
-        return articleTypeDTO;
-    }
-
-    public Boolean delete(Integer id) {
-        Optional<ArticleType> byId = articleTypeRepository.findById(id);
-        if (!byId.isPresent()){
-            throw new AppBadException("Article type with id " + id + " not found");
-        }
-        articleTypeRepository.deleteById(id);
-        return true;
+    
+    public ArticleType get(Integer id){
+       ArticleType articleType = articleTypeRepository.findById(id).orElseThrow(()-> new AppBadException("Article type with id " + id + " not found"));
+       return articleType;
     }
 }

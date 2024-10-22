@@ -43,16 +43,7 @@ public class RegionService {
         return regionDTOList;
     }
 
-    public RegionDTO toDTO(Region region) {
-        RegionDTO regionDTO = new RegionDTO();
-        regionDTO.setId(region.getId());
-        regionDTO.setName_uz(region.getName_uz());
-        regionDTO.setName_ru(region.getName_ru());
-        regionDTO.setName_en(region.getName_en());
-        regionDTO.setVisible(region.getVisible());
-        regionDTO.setCreatedDate(region.getCreatedDate());
-        return regionDTO;
-    }
+
 
     public RegionDTO getById(Integer id) {
         Optional<Region> byId = regionRepository.findById(id);
@@ -81,5 +72,15 @@ public class RegionService {
     public Boolean delete(Integer id) {
         regionRepository.deleteById(id);
         return true;
+    }
+    public RegionDTO toDTO(Region region) {
+        RegionDTO regionDTO = new RegionDTO();
+        regionDTO.setId(region.getId());
+        regionDTO.setName_uz(region.getName_uz());
+        regionDTO.setName_ru(region.getName_ru());
+        regionDTO.setName_en(region.getName_en());
+        regionDTO.setVisible(region.getVisible());
+        regionDTO.setCreatedDate(region.getCreatedDate());
+        return regionDTO;
     }
 }

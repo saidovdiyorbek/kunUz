@@ -6,7 +6,9 @@ Content-Type: application/json
   "surname": "Saidov",
   "password": "nimaDebOylisan",
   "email": "saidovdiyer777@gmail.com",
-  "phone": "+998995191612"
+  "phone": "+998995191612",
+  "role": "MODERATOR",
+
 
 }
 ###

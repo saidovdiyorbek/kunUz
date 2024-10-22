@@ -12,4 +12,7 @@ import java.time.LocalDateTime;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ArticleType extends BaseType{
 
+    @ManyToOne
+    @JoinColumn(name = "article_id")
+    private Article article;
 }

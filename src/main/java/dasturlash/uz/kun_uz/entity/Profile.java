@@ -35,7 +35,7 @@ public class Profile {
 
     @Column(nullable = true)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role   ;
 
     @Column(nullable = false)
     private Boolean visible;
