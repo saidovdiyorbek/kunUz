@@ -48,23 +48,31 @@
             http.authorizeHttpRequests(hrr -> {
                         hrr
                                 // Authentication APIs - open to all
+                                .requestMatchers(HttpMethod.GET,"/article/last8/exclude").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/post", "post/**").permitAll()
                                 .requestMatchers("/category/lang").permitAll()
                                 .requestMatchers("/article-type/lang").permitAll()
                                 .requestMatchers("/region/lang").permitAll()
                                 .requestMatchers("/attach/upload").permitAll()
+                                .requestMatchers("/articleType/getAll").permitAll()
+                                .requestMatchers("/article/{type}/{n}").permitAll()
+                                .requestMatchers("/article/{typeId}/{n}").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/attach/open/{fileName}",
                                                                 "/attach/openGeneral/{fileName}",
                                                                 "/attach/download/{fileName}").permitAll()
-                                .requestMatchers("/articleType/**").hasRole("ADMIN")
-                                .requestMatchers("/post", "post/**").permitAll()
-                                .requestMatchers("/article/**").hasRole("MODERATOR")
-                                .requestMatchers("category/**").hasRole("ADMIN")
+
+                                // APIs - open PUBLISHER
                                 .requestMatchers("article/changeStatus/{id}/{statusPublish}").hasRole("PUBLISHER")
-                                .requestMatchers("/articleType/getAll").permitAll()
-                                .requestMatchers("/article/{type}/{n}").permitAll()
-                                .requestMatchers(HttpMethod.GET,"/article/last8/exclude").permitAll()
-                                .requestMatchers("/article/{typeId}/{n}").permitAll()
+
+                                // APIs - open MODERATOR
+                                .requestMatchers("/article/**").hasRole("MODERATOR")
+
+                                // APIs - open ADMIN
+                                .requestMatchers("/articleType/**").hasRole("ADMIN")
+                                .requestMatchers("category/**").hasRole("ADMIN")
+
+
 
 
                                 .anyRequest()

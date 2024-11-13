@@ -20,4 +20,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9NT0RFUkFUT1IiLCJzd
 ###
 GET localhost:8080/article/last8/exclude?excludeIds=6b35d2e2-22a2-419a-856d-13b171b219ae
 
-#Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9NT0RFUkFUT1IiLCJzdWIiOiJtYXNzYUR1bWJhIiwiaWF0IjoxNzMxNDk2MDkxLCJleHAiOjE3MzE1ODI0OTF9.qCno-NecS9RfYnJJ_txuSWDUCpHeiRP_AFfUBscDDso
+
+
+###Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9NT0RFUkFUT1IiLCJzdWIiOiJtYXNzYUR1bWJhIiwiaWF0IjoxNzMxNDk2MDkxLCJleHAiOjE3MzE1ODI0OTF9.qCno-NecS9RfYnJJ_txuSWDUCpHeiRP_AFfUBscDDso

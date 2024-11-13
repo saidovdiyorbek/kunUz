@@ -1,10 +1,12 @@
 package dasturlash.uz.kun_uz.service;
 
 import dasturlash.uz.kun_uz.dto.article.ArticleDTO;
+import dasturlash.uz.kun_uz.dto.article.ArticleFullInfo;
 import dasturlash.uz.kun_uz.dto.article.ArticleShortInfo;
 import dasturlash.uz.kun_uz.entity.Article;
 import dasturlash.uz.kun_uz.entity.ArticleViewTracker;
 import dasturlash.uz.kun_uz.enums.ArticleStatus;
+import dasturlash.uz.kun_uz.enums.Language;
 import dasturlash.uz.kun_uz.exp.AppBadException;
 import dasturlash.uz.kun_uz.repository.*;
 import dasturlash.uz.kun_uz.util.SpringSecurityUtil;
@@ -33,6 +35,8 @@ public class ArticleService {
     AttachService attachService;
     @Autowired
     ArticleViesTrackerRepository articleViesTrackerRepository;
+    @Autowired
+    ArticleTagService articleTagService;
 
     public ArticleDTO create(ArticleDTO articleDTO) {
         Article article = new Article();
@@ -134,8 +138,6 @@ public class ArticleService {
         return true;
     }
 
-
-
     public List<ArticleShortInfo> getLast5ArticlesByType(String id, int n) {
 
         List<String> listArticleId = articleTypesService.getArticleId(id, n);
@@ -153,12 +155,33 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
+    // 8. Get Article by ID and Language
+    public ArticleFullInfo getArticleByIdAndLang(String id, Language lang) {
+        Article article = articleRepository.findByIdAndVisibleIsTrue(id);
+        // Convert based on language
+        return convertToFullInfo(article);
+    }
 
-    // 16. Increase Article View Count by Article ID
-    public void incrementViewCount(String id) {
-        Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Article not found"));
-        article.setViewCount(article.getViewCount() + 1);
-        articleRepository.save(article);
+    // 9. Get Last 4 Articles by Type excluding specific article ID
+    public List<ArticleShortInfo> getLast4ArticlesByTypeExcludingId(String type, String excludeId) {
+        List<String> articleIds = articleTypesService.getArticleId(type, 4);
+        for (String articleId : articleIds) {
+            if (articleId.contains(excludeId)) {
+                articleIds.remove(articleId);
+            }
+        }
+            return articleRepository.findTop5(articleIds)
+                    .stream()
+                    .map(this::convertToShortInfo)
+                    .collect(Collectors.toList());
+        }
+
+        // 10. Get 4 most read articlesUUID
+    public List<ArticleShortInfo> getTopReadArticles() {
+        return articleRepository.findTop4ByVisibleIsTrueOrderByViewCountDesc()
+                .stream()
+                .map(this::convertToShortInfo)
+                .collect(Collectors.toList());
     }
 
     public void increaseArticleViewCount(String articleId, String deviceId) {
@@ -179,6 +202,16 @@ public class ArticleService {
         }
     }
 
+    // 11. Get Last 4 Articles By TagName
+    public List<ArticleShortInfo> getLast4ArticlesByTag(String tagName) {
+        List<String> byTagName = articleTagService.getByTagName(tagName);
+        Pageable pageable = PageRequest.of(0, 4);
+        return articleRepository.findTopNArticle(byTagName, pageable)
+                .stream()
+                .map(this::convertToShortInfo)
+                .collect(Collectors.toList());
+
+    }
 /*
     public List<ArticleShortInfo> getLast3ArticlesByType(String type, Pageable pageable) {
         return articleRepository.findTop3ByArticleTypeAndVisibleIsTrueOrderByCreatedDateDesc(type, pageable)
@@ -189,37 +222,7 @@ public class ArticleService {
 
 
 
-    // 8. Get Article by ID and Language
-    public ArticleFullInfo getArticleByIdAndLang(String id, String lang) {
-        Article article = articleRepository.findByIdAndVisibleIsTrue(id);
-        // Convert based on language
-        return convertToFullInfo(article, lang);
-    }
 
-    // 9. Get Last 4 Articles by Type excluding specific article ID
-    public List<ArticleShortInfo> getLast4ArticlesByTypeExcludingId(String type, String excludeId) {
-        return articleRepository.findTop4ByArticleTypeAndIdNotAndVisibleIsTrueOrderByCreatedDateDesc(type, excludeId)
-                .stream()
-                .map(this::convertToShortInfo)
-                .collect(Collectors.toList());
-    }
-
-    // 10. Get 4 most read articlesUUID
-
-    public List<ArticleShortInfo> getTopReadArticles() {
-        return articleRepository.findTop4ByVisibleIsTrueOrderByViewCountDesc()
-                .stream()
-                .map(this::convertToShortInfo)
-                .collect(Collectors.toList());
-    }
-
-    // 11. Get Last 4 Articles By TagName
-    public List<ArticleShortInfo> getLast4ArticlesByTag(String tagName) {
-        return articleRepository.findTop4ByTags_NameAndVisibleIsTrueOrderByCreatedDateDesc(tagName)
-                .stream()
-                .map(this::convertToShortInfo)
-                .collect(Collectors.toList());
-    }
 
     // 12. Get Last 5 Articles By Type And Region Key
     public List<ArticleShortInfo> getLast5ArticlesByTypeAndRegion(String type, Integer regionKey) {
@@ -255,7 +258,12 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-
+ // 16. Increase Article View Count by Article ID
+    public void incrementViewCount(String id) {
+        Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Article not found"));
+        article.setViewCount(article.getViewCount() + 1);
+        articleRepository.save(article);
+    }
 
     // 17. Increase Share View Count by Article ID
     public void incrementShareCount(String id) {
@@ -287,15 +295,7 @@ public class ArticleService {
 
 
 
-    private ArticleFullInfo convertToFullInfo(Article article, String lang) {
-        ArticleFullInfo info = new ArticleFullInfo();
-        info.setId(article.getId());
-        info.setTitle(article.getTitle());
-        info.setContent(article.getContent());
-        info.setCreatedDate(article.getCreatedDate());
-        info.setDescription(article.getDescription());
-        return info;
-    }
+
 
     public ArticleShortInfo toShortInfo(ArticleShortInfoMapper mapper) {
         ArticleShortInfo dto = new ArticleShortInfo();
@@ -318,6 +318,16 @@ public class ArticleService {
         info.setDescription(article.getDescription());
         info.setPublishedDate(article.getPublishedDate());
         info.setImage(attachService.getUrl(article.getImage_id()));
+        return info;
+    }
+
+    private ArticleFullInfo convertToFullInfo(Article article) {
+        ArticleFullInfo info = new ArticleFullInfo();
+        info.setId(article.getId());
+        info.setTitle(article.getTitle());
+        info.setContent(article.getContent());
+        info.setPublishedDate(article.getPublishedDate());
+        info.setDescription(article.getDescription());
         return info;
     }
 }

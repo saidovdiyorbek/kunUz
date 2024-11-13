@@ -23,6 +23,10 @@ public interface ArticleTypesRepository extends CrudRepository<ArticleTypes,Stri
     @Query("delete  from ArticleTypes where articleId = ?1 and articleTypeId =?2 ")
     void deleteByArticleIdAndArticleTypeId(String articleId, Integer articleTypeId);
 
-    @Query("select aty.articleId from ArticleTypes aty where aty.article.status = 'PUBLISHED' and aty.articleTypeId = ?1")
+    @Query("select aty.articleId " +
+            "from ArticleTypes aty " +
+            " where aty.article.status = 'PUBLISHED' and aty.articleTypeId = ?1")
     List<String> findTop5ByArticleTypeIdOrderByIdDesc(String articleTypeId, Pageable pageable);
+
+
 }

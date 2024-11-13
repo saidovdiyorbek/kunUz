@@ -3,6 +3,7 @@ package dasturlash.uz.kun_uz.controller;
 import dasturlash.uz.kun_uz.dto.article.ArticleDTO;
 import dasturlash.uz.kun_uz.dto.article.ArticleFullInfo;
 import dasturlash.uz.kun_uz.dto.article.ArticleShortInfo;
+import dasturlash.uz.kun_uz.enums.Language;
 import dasturlash.uz.kun_uz.service.ArticleService;
 import dasturlash.uz.kun_uz.util.HeaderUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,20 +68,12 @@ public class ArticleController {
     }
 
 //    // 8. Get Article by ID and Language
-//    @GetMapping("/{id}/lang")
-//    public ResponseEntity<ArticleFullInfo> getArticleByIdAndLang(@PathVariable String id, @RequestParam String lang) {
-//        return ResponseEntity.ok(articleService.getArticleByIdAndLang(id, lang));
-//    }
+    @GetMapping("/{id}/lang")
+    public ResponseEntity<ArticleFullInfo> getArticleByIdAndLang(@PathVariable String id, @RequestParam String lang) {
+        Language language = Language.valueOf(lang.toUpperCase());
+        return ResponseEntity.ok(articleService.getArticleByIdAndLang(id, language));
+    }
 
-
-
-
-/* @GetMapping("/{id}")
-    public ResponseEntity<ArticleDTO> byId(@PathVariable("id") String id, HttpServletRequest request) {
-        return ResponseEntity.ok(articleService.getById(id, HeaderUtil.getUserIP(request)));
-    }*/
-
-    /*
 
     // 9. Get Last 4 Articles by Type excluding specific article ID
     @GetMapping("/last4/type/{type}/exclude/{excludeId}")
@@ -99,6 +92,19 @@ public class ArticleController {
     public ResponseEntity<List<ArticleShortInfo>> getLast4ByTag(@PathVariable String tagName) {
         return ResponseEntity.ok(articleService.getLast4ArticlesByTag(tagName));
     }
+
+/* @GetMapping("/{id}")
+    public ResponseEntity<ArticleDTO> byId(@PathVariable("id") String id, HttpServletRequest request) {
+        return ResponseEntity.ok(articleService.getById(id, HeaderUtil.getUserIP(request)));
+    }*/
+
+    /*
+
+
+
+
+
+
 
     // 12. Get Last 5 Articles By Type And Region Key
     @GetMapping("/last5/type/{type}/region/{regionKey}")

@@ -19,26 +19,22 @@ import java.lang.String;
 
 public interface ArticleRepository extends CrudRepository<Article, String>, JpaRepository<Article, String>, PagingAndSortingRepository<Article, String> {
 
-
-
-
     @Query("from Article a where a in ?1")
     List<Article> findTop5ArticlesById(List<String> id);
 
     List<Article> findTop8ByIdNotInAndVisibleIsTrueOrderByCreatedDateDesc(List<String> excludeIds);
 
-    /*@Query("SELECT a FROM Article a WHERE a.articleType = :type AND a.visible = true ORDER BY a.createdDate DESC")
-    List<Article> ffindTop5ByArticleTypeAndVisibleIsTrueOrderByCreatedDateDesc(@Param("type") String type, Pageable pageable);*/
-
-   /* List<Article> findTop3ByArticleTypeAndVisibleIsTrueOrderByCreatedDateDesc(@Param("type") String type, Pageable pageable);
-
-
-
     Article findByIdAndVisibleIsTrue(String id);
 
-    List<Article> findTop4ByArticleTypeAndIdNotAndVisibleIsTrueOrderByCreatedDateDesc(String type, String excludeId);
+    @Query("from Article where id in ?1 order by createdDate desc ")
+    List<Article> findTop5(List<String> id);
 
     List<Article> findTop4ByVisibleIsTrueOrderByViewCountDesc();
+
+    @Query("from Article a where a in ?1")
+    List<Article> findTopNArticle(List<String> id, Pageable pageable);
+    /*
+
 
     List<Article> findTop4ByTags_NameAndVisibleIsTrueOrderByCreatedDateDesc(String tagName);
 
