@@ -23,10 +23,9 @@ public class CategoryService {
         category.setName_uz(categoryDTO.getName_uz());
         category.setName_en(categoryDTO.getName_en());
         category.setName_ru(categoryDTO.getName_ru());
-
         category.setOrderNumber(categoryDTO.getOrderNumber());
-        category.setVisible(categoryDTO.getVisible());
         category.setCreatedDate(LocalDateTime.now());
+        category.setVisible(true);
         categoryRepository.save(category);
 
         categoryDTO.setId(category.getId());
@@ -40,7 +39,6 @@ public class CategoryService {
         categoryDTO.setName_en(category.getName_en());
         categoryDTO.setName_ru(category.getName_ru());
         categoryDTO.setOrderNumber(category.getOrderNumber());
-        categoryDTO.setVisible(category.getVisible());
         return categoryDTO;
     }
 
@@ -71,7 +69,7 @@ public class CategoryService {
         category.setName_en(categoryDTO.getName_en());
         category.setName_ru(categoryDTO.getName_ru());
         category.setOrderNumber(categoryDTO.getOrderNumber());
-        category.setVisible(categoryDTO.getVisible());
+        category.setVisible(true);
         category.setCreatedDate(LocalDateTime.now());
         categoryDTO.setId(category.getId());
         categoryRepository.save(category);

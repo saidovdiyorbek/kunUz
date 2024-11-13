@@ -1,0 +1,15 @@
+POST localhost:8080/profile
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9BRE1JTiIsInN1YiI6Iis5OTg5OTAwMjYzODUiLCJpYXQiOjE3MzEzMTEyNTksImV4cCI6MTczMTM5NzY1OX0.7snRmql13WVT1HcEYILh11GR3ycKPCpMvlq-ElQ8998
+
+{
+  "name": "Diyor",
+  "surname": "Saidov",
+  "password": "1234567",
+  "email": "massaDumba",
+  "phone": "+998990023322",
+  "role": "ROLE_MODERATOR",
+  "profileStatus": "ACTIVE"
+}
+###
+GET localhost:8080/profile

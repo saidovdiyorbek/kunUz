@@ -19,17 +19,19 @@ public class RegionService {
 
     public RegionDTO add(RegionDTO regionDTO) {
         Region region = new Region();
+
         region.setCreatedDate(LocalDateTime.now());
 
         region.setName_uz(regionDTO.getName_uz());
         region.setName_ru(regionDTO.getName_ru());
         region.setName_en(regionDTO.getName_en());
-        region.setVisible(regionDTO.getVisible());
+        region.setVisible(true);
         region.setOrderNumber(regionDTO.getOrderNumber());
+
         regionRepository.save(region);
 
         regionDTO.setId(region.getId());
-        regionDTO.setCreatedDate(region.getCreatedDate());
+
         return regionDTO;
     }
 
@@ -63,9 +65,9 @@ public class RegionService {
         region.setName_ru(regionDTO.getName_ru());
         region.setName_en(regionDTO.getName_en());
         region.setOrderNumber(regionDTO.getOrderNumber());
-        region.setVisible(regionDTO.getVisible());
+
         regionDTO.setId(id);
-        regionDTO.setCreatedDate(region.getCreatedDate());
+
         return regionDTO;
     }
 
@@ -79,8 +81,8 @@ public class RegionService {
         regionDTO.setName_uz(region.getName_uz());
         regionDTO.setName_ru(region.getName_ru());
         regionDTO.setName_en(region.getName_en());
-        regionDTO.setVisible(region.getVisible());
-        regionDTO.setCreatedDate(region.getCreatedDate());
+
+
         return regionDTO;
     }
 }

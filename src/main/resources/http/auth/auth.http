@@ -1,0 +1,44 @@
+POST localhost:8080/auth/registration
+Content-Type: application/json
+
+{
+  "surname": "Joni",
+  "name": "Jonibek",
+  "email": "diyoree090@gmail.com",
+  "password": "onetwofive6"
+}
+
+###
+POST localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "saidovdiyer777@gmail.com",
+  "password": "onetwofive6"
+}
+
+###
+POST localhost:8080/auth/restPassword
+Content-Type: application/json
+
+{
+  "email": "",
+  "password": "onetwofive6"
+}
+###
+POST localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "+998990026385",
+  "password": "onetwofive6"
+}
+###
+POST localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "massaDumba",
+  "password": "1234567"
+}
+

@@ -1,16 +1,19 @@
 package dasturlash.uz.kun_uz.dto;
 
-import dasturlash.uz.kun_uz.enums.Role;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import dasturlash.uz.kun_uz.entity.Attach;
+import dasturlash.uz.kun_uz.enums.ProfileRole;
+import dasturlash.uz.kun_uz.enums.ProfileStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Setter
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProfileDTO {
+    /*name,surname,email,phone,password,status,role*/
     private Integer id;
     @NotNull
     @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
@@ -30,9 +33,16 @@ public class ProfileDTO {
     @Size(min = 6, message = "Password must be greater than 6")
     private String password;
 
-    private Role role;
+    private ProfileStatus profileStatus;
+
+    private ProfileRole role;
+
+    private String jwtToken;
+
+    private Attach photo;
 
 
 
-    private LocalDate createdDate;
+
+
 }

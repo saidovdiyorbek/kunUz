@@ -1,0 +1,13 @@
+POST localhost:8080/region
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9BRE1JTiIsInN1YiI6Iis5OTg5OTAwMjYzODUiLCJpYXQiOjE3MzEyMzk1NjcsImV4cCI6MTczMTMyNTk2N30.IID5KLQr_XJ-7546CROHO-BuU4FxaK6KPprKBo12Ctw
+
+{
+  "name_uz": "Toshkent",
+  "name_ru": "Ташкент",
+  "name_en": "Tashkent",
+  "orderNumber": 1
+}
+###
+GET localhost:8080/region
+

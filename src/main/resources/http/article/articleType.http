@@ -1,0 +1,15 @@
+POST localhost:8080/articleType
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9NT0RFUkFUT1IiLCJzdWIiOiJzYWlkb3ZkaXllcjc3N0BnbWFpbC5jb20iLCJpYXQiOjE3MzA5ODI1NzEsImV4cCI6MTczMTA2ODk3MX0.1QNgAvDNiRT5lZEPFxbf3zOa2moAYQorULpr06T4eYY
+
+{
+  "name_uz": "Dolfasdfsazarb xabarlar",
+  "name_ru": "Акadfsdaadsffтуальные новости",
+  "name_en": "Actudsaasdfl news",
+  "orderNumber": 2,
+  "visible": true
+
+}
+
+###
+GET localhost:8080/articleType

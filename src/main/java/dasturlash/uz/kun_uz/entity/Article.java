@@ -1,5 +1,6 @@
 package dasturlash.uz.kun_uz.entity;
 
+import dasturlash.uz.kun_uz.enums.ArticleStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,8 +15,8 @@ import java.util.UUID;
 @Getter
 public class Article {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column(nullable = false)
     private String title;
@@ -27,25 +28,46 @@ public class Article {
     private String description;
 
     @Column(nullable = false)
-    private Integer shared_count;
+    private Integer shared_count = 0;
 
     @Column
-    private Integer image_id;
+    private String image_id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id", updatable = false, insertable = false)
+    private Attach image;
 
     @Column(nullable = false)
     private Integer region_id;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id",updatable = false, insertable = false)
+    private Region region;
+
+    @Column(name = "category_id", nullable = false)
     private Integer category_id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", updatable = false, insertable = false)
+    private Category category;
 
     @Column(nullable = false)
     private Integer moderator_id;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "moderator_id", updatable = false, insertable = false)
+    private Profile moderator;
+
+    @Column
     private Integer publisher_id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publisher_id", updatable = false, insertable = false)
+    private Profile publisher;
+
     @Column(nullable = false)
-    private String  status;
+    @Enumerated(EnumType.STRING)
+    private ArticleStatus status;
 
     @Column(nullable = false)
     private LocalDateTime createdDate;
@@ -59,7 +81,5 @@ public class Article {
     @Column
     private Integer viewCount;
 
-    @OneToMany(mappedBy = "article")
-    private List<ArticleType> articleType;
 
 }

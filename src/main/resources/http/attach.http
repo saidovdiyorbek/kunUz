@@ -1,0 +1,12 @@
+POST http://localhost:8080/attach/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="McGonagall_(screenshot).jpg"
+
+</home/diyorbek/Pictures/McGonagall_(screenshot).jpg
+###
+GET localhost:8080/attach/open/726997bd-aec5-445e-949a-45eefb5442f7.jpg
+###
+GET localhost:8080/attach/openGeneral/726997bd-aec5-445e-949a-45eefb5442f7.jpg
+

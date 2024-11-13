@@ -1,9 +1,11 @@
 package dasturlash.uz.kun_uz.entity;
 
-import dasturlash.uz.kun_uz.enums.Role;
+import dasturlash.uz.kun_uz.enums.ProfileRole;
+import dasturlash.uz.kun_uz.enums.ProfileStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Lazy;
 
 import java.time.LocalDateTime;
 
@@ -24,25 +26,30 @@ public class Profile {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column
     private String phone;
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
-    private Boolean status;
+    @Enumerated(EnumType.STRING)
+    private ProfileStatus status;
 
     @Column(nullable = true)
     @Enumerated(EnumType.STRING)
-    private Role role   ;
+    private ProfileRole role;
 
     @Column(nullable = false)
     private Boolean visible;
 
     @Column(nullable = false)
-    private LocalDateTime created_date;
+    private LocalDateTime createDate;
 
     @Column
-    private Integer photo_id;
+    private String photo_id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(insertable = false, updatable = false)
+    private Attach attach;
 }

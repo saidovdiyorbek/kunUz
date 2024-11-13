@@ -1,0 +1,23 @@
+POST localhost:8080/article
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9NT0RFUkFUT1IiLCJzdWIiOiJzYWlkb3ZkaXllcjc3N0BnbWFpbC5jb20iLCJpYXQiOjE3MzEyMzgzNzcsImV4cCI6MTczMTMyNDc3N30.u3t8Vq1ExX_YSBy4AQWSXmTkfTW6slEQkuiFSXPXU-8
+
+{
+  "title": "salom gruppadagilar",
+  "description": "hayr gruppadagilar",
+  "content": "bopti gruppadagilar",
+  "image_id": "e3f0a577-9ec9-42bf-a624-9e3ddd5b866b.jpg",
+  "category_id": 2,
+  "region_id": 1,
+  "articleTypesList": [5,6,7]
+}
+###
+GET localhost:8080/article/changeStatus/42489343-877a-46c7-918c-2f40f06400a0/false
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9NT0RFUkFUT1IiLCJzdWIiOiJtYXNzYUR1bWJhIiwiaWF0IjoxNzMxMzExNjI0LCJleHAiOjE3MzEzOTgwMjR9.PNTdo7ileiXbTJ6mP6ONJ7vVOu1-reEetPyKSzmtziY
+###
+GET localhost:8080/article/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9NT0RFUkFUT1IiLCJzdWIiOiJtYXNzYUR1bWJhIiwiaWF0IjoxNzMxMzk3NTQ3LCJleHAiOjE3MzE0ODM5NDd9.2SyAedR8dpZ82TxNDyOeF8i2vEcrNjwlA1CL-ABg9w0
+###
+GET localhost:8080/article/last8/exclude?excludeIds=6b35d2e2-22a2-419a-856d-13b171b219ae
+
+#Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9NT0RFUkFUT1IiLCJzdWIiOiJtYXNzYUR1bWJhIiwiaWF0IjoxNzMxNDk2MDkxLCJleHAiOjE3MzE1ODI0OTF9.qCno-NecS9RfYnJJ_txuSWDUCpHeiRP_AFfUBscDDso

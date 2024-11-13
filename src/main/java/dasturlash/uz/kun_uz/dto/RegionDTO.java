@@ -17,7 +17,4 @@ public class RegionDTO {
     private String name_en;
     private Integer orderNumber;
 
-
-    private Boolean visible;
-    private LocalDateTime createdDate;
 }

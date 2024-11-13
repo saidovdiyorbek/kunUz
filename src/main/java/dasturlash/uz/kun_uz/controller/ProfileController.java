@@ -1,7 +1,11 @@
 package dasturlash.uz.kun_uz.controller;
 
+import dasturlash.uz.kun_uz.dto.JwtDTO;
 import dasturlash.uz.kun_uz.dto.ProfileDTO;
+import dasturlash.uz.kun_uz.dto.UpdateProfileDetailDTO;
 import dasturlash.uz.kun_uz.service.ProfileService;
+import dasturlash.uz.kun_uz.util.JWTUtil;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.convert.PeriodUnit;
@@ -19,8 +23,10 @@ public class ProfileController {
     ProfileService profileService;
 
     @PostMapping("")
-    public ResponseEntity<ProfileDTO> add(@RequestBody ProfileDTO profileDTO) {
-        return ResponseEntity.ok(profileService.add(profileDTO));
+    public ResponseEntity<ProfileDTO> add(@RequestBody ProfileDTO profileDTO,
+                                          @RequestHeader("Authorization") String token) {
+        JwtDTO decode = JWTUtil.decode(token.substring(7));
+        return ResponseEntity.ok(profileService.add(profileDTO, decode));
     }
 
     @GetMapping("")
@@ -48,4 +54,12 @@ public class ProfileController {
                                                           @RequestParam(value = "size", defaultValue = "10")int size){
         return ResponseEntity.ok(profileService.pagination(page, size));
     }
+
+    @PutMapping("/detail")
+    public ResponseEntity<Boolean> updateDetail(@RequestBody @Valid UpdateProfileDetailDTO requestDTO,
+                                                @RequestHeader("Authorization") String token) {
+        JwtDTO dto = JWTUtil.decode(token.substring(7));
+        return ResponseEntity.ok().body(profileService.updateDetail(requestDTO, dto.getUsername()));
+    }
+
 }

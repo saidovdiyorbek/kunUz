@@ -1,10 +1,16 @@
 package dasturlash.uz.kun_uz.service;
 
+import dasturlash.uz.kun_uz.dto.JwtDTO;
 import dasturlash.uz.kun_uz.dto.ProfileDTO;
+import dasturlash.uz.kun_uz.dto.UpdateProfileDetailDTO;
 import dasturlash.uz.kun_uz.entity.Profile;
-import dasturlash.uz.kun_uz.enums.Role;
+import dasturlash.uz.kun_uz.enums.ProfileRole;
+import dasturlash.uz.kun_uz.enums.ProfileStatus;
 import dasturlash.uz.kun_uz.exp.AppBadException;
 import dasturlash.uz.kun_uz.repository.ProfileRepository;
+import dasturlash.uz.kun_uz.util.MD5Util;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,9 +29,15 @@ public class ProfileService {
     @Autowired
     ProfileRepository profileRepository;
 
-    public ProfileDTO add(ProfileDTO profileDTO) {
-        Profile byEmail = profileRepository.findByEmail(profileDTO.getEmail());
-        if (byEmail != null) {
+    public ProfileDTO add(ProfileDTO profileDTO, JwtDTO jwtDTO) {
+        Optional<Profile> byEmail1 = profileRepository.findByEmail(jwtDTO.getUsername());
+
+        if (!byEmail1.get().getRole().equals(ProfileRole.ROLE_ADMIN)){
+            throw new AppBadException("Forbidden");
+        }
+
+        Optional<Profile> byEmail = profileRepository.findByEmail(profileDTO.getEmail());
+        if (!byEmail.isEmpty()) {
             throw new AppBadException("Email already exists");
         }
         Profile byPhone = profileRepository.findByPhone(profileDTO.getPhone());
@@ -35,13 +47,13 @@ public class ProfileService {
         Profile profile = new Profile();
         profile.setName(profileDTO.getName());
         profile.setSurname(profileDTO.getSurname());
-        profile.setPassword(profileDTO.getPassword());
+        profile.setPassword(MD5Util.md5(profileDTO.getPassword()));
         profile.setEmail(profileDTO.getEmail());
         profile.setPhone(profileDTO.getPhone());
         profile.setRole(profileDTO.getRole());
-        profile.setStatus(true);
+        profile.setStatus(ProfileStatus.IN_REGISTERED);
         profile.setVisible(true);
-        profile.setCreated_date(LocalDateTime.now());
+        profile.setCreateDate(LocalDateTime.now());
         profileRepository.save(profile);
 
         profileDTO.setId(profile.getId());
@@ -82,7 +94,7 @@ public class ProfileService {
         if (!byId.isPresent()) {
             throw new AppBadException("Profile not found");
         }
-        Profile byEmail = profileRepository.findByEmail(profileDTO.getEmail());
+        Optional<Profile> byEmail = profileRepository.findByEmail(profileDTO.getEmail());
         if (byEmail != null) {
             throw new AppBadException("Email already exists");
         }
@@ -96,10 +108,11 @@ public class ProfileService {
         profile.setPassword(profileDTO.getPassword());
         profile.setEmail(profileDTO.getEmail());
         profile.setPhone(profileDTO.getPhone());
-        profile.setRole(Role.MODERATOR);
-        profile.setStatus(true);
+        profile.setRole(ProfileRole.ROLE_USER
+        );
+        profile.setStatus(ProfileStatus.IN_REGISTERED);
         profile.setVisible(true);
-        profile.setCreated_date(LocalDateTime.now());
+        profile.setCreateDate(LocalDateTime.now());
         profileRepository.save(profile);
 
         profileDTO.setId(profile.getId());
@@ -117,7 +130,7 @@ public class ProfileService {
 
 
     public Page<ProfileDTO> pagination(int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         List<ProfileDTO> profileDTOS = new LinkedList<>();
 
         Page<Profile> profilePage = profileRepository.findAll(pageable);
@@ -130,4 +143,24 @@ public class ProfileService {
         PageImpl<ProfileDTO> profileDTOS1 = new PageImpl<>(profileDTOS, pageable, totalElements);
         return profileDTOS1;
     }
+        public boolean updateDetail(@Valid UpdateProfileDetailDTO requestDTO, String username) {
+            Profile profile = getByUsername(username);
+            profile.setName(requestDTO.getName());
+            profile.setSurname(requestDTO.getSurname());
+            profileRepository.save(profile);
+
+            return true;
+        }
+
+
+        public Profile getByUsername(String username) {
+            return profileRepository.findByEmailAndVisibleTrue(username).orElseThrow(() -> new AppBadException("User not found"));
+        }
+
+    public Profile getByUsernameProfile(@NotBlank String email) {
+        Optional<Profile> byEmail = profileRepository.findByEmail(email);
+        if (byEmail.isPresent()) return byEmail.get();
+        return null;
+    }
 }
+

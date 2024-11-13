@@ -1,7 +1,6 @@
 package dasturlash.uz.kun_uz.controller;
 
-import dasturlash.uz.kun_uz.dto.ArticleTypeDTO;
-import dasturlash.uz.kun_uz.entity.ArticleType;
+import dasturlash.uz.kun_uz.dto.article.ArticleTypeDTO;
 import dasturlash.uz.kun_uz.service.ArticleTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ public class ArticleTypeController {
         return ResponseEntity.ok(articleTypeService.add(articleTypeDTO));
     }
 
-    @GetMapping("")
+    @GetMapping("/getAll")
     public ResponseEntity<List<ArticleTypeDTO>> getAll() {
         return ResponseEntity.ok(articleTypeService.getAll());
     }

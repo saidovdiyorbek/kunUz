@@ -31,7 +31,19 @@ public class ExceptionHandlerController {
 
 
     @ExceptionHandler(AppBadException.class)
-    public ResponseEntity<String> handleBadException(AppBadException ex) {
+    public ResponseEntity<String> handleAppBadException(AppBadException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handle(RuntimeException e) {
+        e.printStackTrace();
+        return ResponseEntity.internalServerError().body(e.getMessage());
+    }
+
 }

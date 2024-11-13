@@ -1,9 +1,7 @@
 package dasturlash.uz.kun_uz.service;
 
-import dasturlash.uz.kun_uz.dto.ArticleTypeDTO;
-import dasturlash.uz.kun_uz.dto.RegionDTO;
+import dasturlash.uz.kun_uz.dto.article.ArticleTypeDTO;
 import dasturlash.uz.kun_uz.entity.ArticleType;
-import dasturlash.uz.kun_uz.entity.Region;
 import dasturlash.uz.kun_uz.exp.AppBadException;
 import dasturlash.uz.kun_uz.repository.ArticleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ArticleTypeService {
@@ -27,7 +24,6 @@ public class ArticleTypeService {
         articleType.setName_ru(articleTypeDTO.getName_ru());
         articleType.setName_uz(articleTypeDTO.getName_uz());
         articleType.setOrderNumber(articleTypeDTO.getOrderNumber());
-        articleType.setVisible(articleTypeDTO.getVisible());
         articleType.setCreatedDate(LocalDateTime.now());
         articleTypeRepository.save(articleType);
 
@@ -74,8 +70,7 @@ public class ArticleTypeService {
         articleTypeDTO.setName_uz(articleType.getName_uz());
         articleTypeDTO.setName_ru(articleType.getName_ru());
         articleTypeDTO.setName_en(articleType.getName_en());
-        articleTypeDTO.setVisible(articleType.getVisible());
-        articleTypeDTO.setCreatedDate(articleType.getCreatedDate());
+
         return articleTypeDTO;
     }
     
@@ -83,4 +78,6 @@ public class ArticleTypeService {
        ArticleType articleType = articleTypeRepository.findById(id).orElseThrow(()-> new AppBadException("Article type with id " + id + " not found"));
        return articleType;
     }
+
+
 }
