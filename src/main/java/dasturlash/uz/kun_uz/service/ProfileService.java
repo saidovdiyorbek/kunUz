@@ -1,14 +1,16 @@
 package dasturlash.uz.kun_uz.service;
 
-import dasturlash.uz.kun_uz.dto.JwtDTO;
-import dasturlash.uz.kun_uz.dto.ProfileDTO;
+import dasturlash.uz.kun_uz.dto.profile.ProfileDTO;
+import dasturlash.uz.kun_uz.dto.RegistrationDTO;
 import dasturlash.uz.kun_uz.dto.UpdateProfileDetailDTO;
+import dasturlash.uz.kun_uz.dto.profile.ProfileFilterDTO;
 import dasturlash.uz.kun_uz.entity.Profile;
 import dasturlash.uz.kun_uz.enums.ProfileRole;
 import dasturlash.uz.kun_uz.enums.ProfileStatus;
 import dasturlash.uz.kun_uz.exp.AppBadException;
 import dasturlash.uz.kun_uz.repository.ProfileRepository;
 import dasturlash.uz.kun_uz.util.MD5Util;
+import dasturlash.uz.kun_uz.util.SpringSecurityUtil;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +30,10 @@ import java.util.Optional;
 public class ProfileService {
     @Autowired
     ProfileRepository profileRepository;
+    @Autowired
+    ResourceBundleService resourceBundleService;
 
-    public ProfileDTO add(ProfileDTO profileDTO, JwtDTO jwtDTO) {
-        Optional<Profile> byEmail1 = profileRepository.findByEmail(jwtDTO.getUsername());
-
-        if (!byEmail1.get().getRole().equals(ProfileRole.ROLE_ADMIN)){
-            throw new AppBadException("Forbidden");
-        }
+    public ProfileDTO add(ProfileDTO profileDTO) {
 
         Optional<Profile> byEmail = profileRepository.findByEmail(profileDTO.getEmail());
         if (!byEmail.isEmpty()) {
@@ -143,8 +142,10 @@ public class ProfileService {
         PageImpl<ProfileDTO> profileDTOS1 = new PageImpl<>(profileDTOS, pageable, totalElements);
         return profileDTOS1;
     }
-        public boolean updateDetail(@Valid UpdateProfileDetailDTO requestDTO, String username) {
-            Profile profile = getByUsername(username);
+        public boolean updateDetail(@Valid UpdateProfileDetailDTO requestDTO) {
+            Optional<Profile> optionalProfile = profileRepository.findById(SpringSecurityUtil.getCurrentUserId());
+
+            Profile profile = optionalProfile.get();
             profile.setName(requestDTO.getName());
             profile.setSurname(requestDTO.getSurname());
             profileRepository.save(profile);
@@ -161,6 +162,30 @@ public class ProfileService {
         Optional<Profile> byEmail = profileRepository.findByEmail(email);
         if (byEmail.isPresent()) return byEmail.get();
         return null;
+    }
+
+    public Boolean  checkStatusInRegister(Profile profile) {
+        if (profile.getStatus() == ProfileStatus.IN_REGISTERED) {
+            return true;
+        }
+        return false;
+    }
+    public Profile createNewProfileNotExist(RegistrationDTO dto){
+        Profile entity = new Profile();
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+        entity.setPassword(MD5Util.md5(dto.getPassword()));
+        entity.setSurname(dto.getSurname());
+        entity.setStatus(ProfileStatus.IN_REGISTERED);
+        entity.setVisible(Boolean.TRUE);
+        entity.setCreateDate(LocalDateTime.now());
+        profileRepository.save(entity);
+        return entity;
+    }
+
+
+    public ProfileFilterDTO getFilter(ProfileFilterDTO dto) {
+        return  null;
     }
 }
 

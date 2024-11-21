@@ -93,17 +93,22 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.getLast4ArticlesByTag(tagName));
     }
 
-/* @GetMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ArticleDTO> byId(@PathVariable("id") String id, HttpServletRequest request) {
         return ResponseEntity.ok(articleService.getById(id, HeaderUtil.getUserIP(request)));
-    }*/
+    }
+
+    @GetMapping("/like")
+    public ResponseEntity<String> like(@RequestParam String id) {
+        return ResponseEntity.ok(articleService.like(id));
+    }
+
+    @GetMapping("/disLike")
+    public ResponseEntity<String> disLike(@RequestParam String id) {
+        return ResponseEntity.ok(articleService.dislike(id));
+    }
 
     /*
-
-
-
-
-
 
 
     // 12. Get Last 5 Articles By Type And Region Key

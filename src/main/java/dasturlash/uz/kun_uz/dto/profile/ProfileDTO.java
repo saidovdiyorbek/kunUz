@@ -1,4 +1,4 @@
-package dasturlash.uz.kun_uz.dto;
+package dasturlash.uz.kun_uz.dto.profile;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import dasturlash.uz.kun_uz.entity.Attach;

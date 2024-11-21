@@ -5,8 +5,10 @@ import dasturlash.uz.kun_uz.dto.article.ArticleShortInfo;
 import dasturlash.uz.kun_uz.entity.Article;
 import dasturlash.uz.kun_uz.enums.ArticleStatus;
 import dasturlash.uz.kun_uz.mapper.ArticleShortInfoMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -33,8 +35,13 @@ public interface ArticleRepository extends CrudRepository<Article, String>, JpaR
 
     @Query("from Article a where a in ?1")
     List<Article> findTopNArticle(List<String> id, Pageable pageable);
-    /*
 
+    @Transactional
+    @Modifying
+    @Query("update  Article set viewCount =  COALESCE(viewCount,0) + 1 where id =?1 ")
+    void updateViewCount(String id);
+
+    /*
 
     List<Article> findTop4ByTags_NameAndVisibleIsTrueOrderByCreatedDateDesc(String tagName);
 

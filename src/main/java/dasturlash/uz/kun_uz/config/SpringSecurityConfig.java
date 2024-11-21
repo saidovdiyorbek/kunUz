@@ -47,6 +47,10 @@
 
             http.authorizeHttpRequests(hrr -> {
                         hrr
+
+                                .requestMatchers("/article/like").authenticated()
+                                .requestMatchers("/article/disLike").authenticated()
+                                .requestMatchers("/profile/details").authenticated()
                                 // Authentication APIs - open to all
                                 .requestMatchers(HttpMethod.GET,"/article/last8/exclude").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
@@ -61,6 +65,7 @@
                                 .requestMatchers(HttpMethod.GET, "/attach/open/{fileName}",
                                                                 "/attach/openGeneral/{fileName}",
                                                                 "/attach/download/{fileName}").permitAll()
+                                .requestMatchers("/article/*").permitAll()
 
                                 // APIs - open PUBLISHER
                                 .requestMatchers("article/changeStatus/{id}/{statusPublish}").hasRole("PUBLISHER")

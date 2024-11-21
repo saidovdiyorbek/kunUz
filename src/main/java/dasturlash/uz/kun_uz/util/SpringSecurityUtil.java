@@ -2,6 +2,7 @@ package dasturlash.uz.kun_uz.util;
 
 import dasturlash.uz.kun_uz.config.CustomUserDetails;
 import dasturlash.uz.kun_uz.enums.ProfileRole;
+import dasturlash.uz.kun_uz.exp.AppBadException;
 import dasturlash.uz.kun_uz.exp.AppForbiddenException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,9 +19,17 @@ public class SpringSecurityUtil {
     }
 
     public static Integer getCurrentUserId() {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        return user.getId();
+        if (authentication != null) {
+            Object principal = authentication.getPrincipal();
+                if (principal instanceof CustomUserDetails) {
+                return ((CustomUserDetails) principal).getId();
+            } else if (principal instanceof String && "anonymousUser".equals(((String) principal))) {
+                throw new RuntimeException("Anonymous user");
+            }
+        }
+        throw new AppBadException("http://localhost:8080/auth/login");
     }
 
 }

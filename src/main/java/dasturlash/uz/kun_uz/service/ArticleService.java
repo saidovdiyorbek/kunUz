@@ -11,6 +11,7 @@ import dasturlash.uz.kun_uz.exp.AppBadException;
 import dasturlash.uz.kun_uz.repository.*;
 import dasturlash.uz.kun_uz.util.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,12 @@ public class ArticleService {
     ArticleViesTrackerRepository articleViesTrackerRepository;
     @Autowired
     ArticleTagService articleTagService;
+    @Autowired
+    ArticleViewRecordService articleViewRecordService;
+    @Autowired
+    ArticleLikeService articleLikeService;
+    @Value("http://localhost:${server.port}")
+    private String domainName;
 
     public ArticleDTO create(ArticleDTO articleDTO) {
         Article article = new Article();
@@ -99,26 +106,17 @@ public class ArticleService {
     }
 
     public ArticleDTO toDTO(Article article) {
-        /*ArticleDTO articleDTO = new ArticleDTO();
+        ArticleDTO articleDTO = new ArticleDTO();
 
-        articleDTO.setCreatedDate(LocalDateTime.now());
         articleDTO.setContent(article.getContent());
         articleDTO.setTitle(article.getTitle());
         articleDTO.setDescription(article.getDescription());
-        articleDTO.setModerator_id(article.getModerator_id());
-        articleDTO.setShared_count(0);
-      *//*  articleDTO.setImage_id(article.getImage_id());*//*
+        articleDTO.setImage_id(article.getImage_id());
         articleDTO.setRegion_id(article.getRegion_id());
         articleDTO.setCategory_id(article.getCategory_id());
-        articleDTO.setModerator_id(article.getModerator_id());
-        articleDTO.setPublisher_id(article.getPublisher_id());
-        articleDTO.setStatus(article.getStatus());
-        articleDTO.setPublishedDate(article.getPublishedDate());
-        articleDTO.setVisible(article.getVisible());
-        articleDTO.setViewCount(article.getViewCount());
-
-        articleDTO.setId(article.getId());*/
-        return null;
+        articleDTO.setUrlLike(domainName + "/article/like?id="+article.getId());
+        articleDTO.setUrlDislike(domainName + "/article/disLike?id="+article.getId());
+        return articleDTO;
     }
 
     public Boolean changeStatus(String id, Boolean statusPublish) {
@@ -165,11 +163,7 @@ public class ArticleService {
     // 9. Get Last 4 Articles by Type excluding specific article ID
     public List<ArticleShortInfo> getLast4ArticlesByTypeExcludingId(String type, String excludeId) {
         List<String> articleIds = articleTypesService.getArticleId(type, 4);
-        for (String articleId : articleIds) {
-            if (articleId.contains(excludeId)) {
-                articleIds.remove(articleId);
-            }
-        }
+        articleIds.removeIf(articleId -> articleId.contains(excludeId));
             return articleRepository.findTop5(articleIds)
                     .stream()
                     .map(this::convertToShortInfo)
@@ -182,24 +176,6 @@ public class ArticleService {
                 .stream()
                 .map(this::convertToShortInfo)
                 .collect(Collectors.toList());
-    }
-
-    public void increaseArticleViewCount(String articleId, String deviceId) {
-        boolean hasViewed = articleViesTrackerRepository.existsByArticleIdAndDeviceId(articleId, deviceId);
-
-        if (!hasViewed) {
-            // Increment view count
-            Article article = articleRepository.findById(articleId).orElseThrow();
-            article.setViewCount(article.getViewCount() + 1);
-            articleRepository.save(article);
-
-            // Save to tracker
-            ArticleViewTracker tracker = new ArticleViewTracker();
-            tracker.setArticleId(articleId);
-            tracker.setDeviceId(deviceId);
-            tracker.setViewDate(LocalDateTime.now());
-            articleViesTrackerRepository.save(tracker);
-        }
     }
 
     // 11. Get Last 4 Articles By TagName
@@ -306,11 +282,20 @@ public class ArticleService {
         dto.setImage(attachService.getDTO(mapper.getImageId()));
         return dto;
     }
+    */
 
-    public List<ArticleShortInfo>*/
+    public ArticleDTO getById(String id, String ip) {
+        // get by id
+        increaseViewCount(id, ip);
+        articleViewRecordService.increaseViewCount(id, ip);
+        return toDTO(articleRepository.findById(id).get());
+    }
 
-    /*public void merge()*/
-
+    public void increaseViewCount(String id, String ip) {
+        if (articleViewRecordService.increaseViewCount(id, ip)) {
+            articleRepository.updateViewCount(id);
+        }
+    }
     private ArticleShortInfo convertToShortInfo(Article article) {
         ArticleShortInfo info = new ArticleShortInfo();
         info.setId(article.getId());
@@ -329,5 +314,13 @@ public class ArticleService {
         info.setPublishedDate(article.getPublishedDate());
         info.setDescription(article.getDescription());
         return info;
+    }
+
+    public String like(String id) {
+        return articleLikeService.isLike(id);
+    }
+
+    public String dislike(String id) {
+        return articleLikeService.isDisLike(id);
     }
 }

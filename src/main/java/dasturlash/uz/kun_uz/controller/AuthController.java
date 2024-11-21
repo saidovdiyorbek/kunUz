@@ -1,6 +1,8 @@
 package dasturlash.uz.kun_uz.controller;
 
 import dasturlash.uz.kun_uz.dto.*;
+import dasturlash.uz.kun_uz.dto.profile.ProfileDTO;
+import dasturlash.uz.kun_uz.enums.AppLanguage;
 import dasturlash.uz.kun_uz.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,28 +16,33 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/registration")
-    public ResponseEntity<String> registration(@RequestBody @Valid RegistrationDTO dto){
-        return ResponseEntity.ok(authService.registration(dto));
+    public ResponseEntity<String> registration(@RequestBody @Valid RegistrationDTO dto,
+                                               @RequestHeader(value = "Accept-Language", defaultValue = "UZ")AppLanguage lang){
+        return ResponseEntity.ok(authService.registration(dto, lang));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ProfileDTO> login(@RequestBody  @Valid AuthDTO dto){
-        return ResponseEntity.ok(authService.login(dto));
+    public ResponseEntity<ProfileDTO> login(@RequestBody  @Valid AuthDTO dto,
+                                            @RequestHeader(value = "Accept-Language", defaultValue = "UZ")AppLanguage lang){
+        return ResponseEntity.ok(authService.login(dto, lang));
     }
 
     @PostMapping("/restPassword")
-    public ResponseEntity<String> rest(@RequestBody  @Valid AuthDTO dto){
-        return ResponseEntity.ok(authService.restPassword(dto));
+    public ResponseEntity<String> rest(@RequestBody  @Valid AuthDTO dto,
+                                       @RequestHeader(value = "Accept-Language",defaultValue = "UZ")AppLanguage lang){
+        return ResponseEntity.ok(authService.restPassword(dto, lang));
     }
 
     @GetMapping("/registration/confirm/{id}")
-    public ResponseEntity<String> registration(@PathVariable Integer id){
-        return ResponseEntity.ok(authService.registrationConfirm(id));
+    public ResponseEntity<String> registration(@PathVariable Integer id,
+                                               @RequestHeader(value = "Accept-Language", defaultValue = "UZ")AppLanguage lang){
+        return ResponseEntity.ok(authService.registrationConfirm(id, lang));
     }
 
     @PostMapping("/registration/sms/confirm")
-    public ResponseEntity<String> smsConfirm(@RequestBody SmsConfirmDTO dto){
-        return ResponseEntity.ok(authService.smsConfirm(dto));
+    public ResponseEntity<String> smsConfirm(@RequestBody SmsConfirmDTO dto,
+                                             @RequestHeader(value = "Accept-Language", defaultValue = "UZ")AppLanguage lang){
+        return ResponseEntity.ok(authService.smsConfirm(dto, lang));
     }
 
 
@@ -45,8 +52,9 @@ public class AuthController {
     @GetMapping("/restPassword/confirmCode/{code}/email")
     public ResponseEntity<String> restPasswordConfirmCode(@PathVariable Integer code,
                                                           @RequestParam String email,
-                                                          @RequestBody String password){
-        return ResponseEntity.ok(authService.confirmCodeForRestPassword(code,email,password));
+                                                          @RequestBody String password,
+                                                          @RequestHeader(value = "Accept-Language", defaultValue = "UZ")AppLanguage lang){
+        return ResponseEntity.ok(authService.confirmCodeForRestPassword(code,email,password, lang));
     }
 
 

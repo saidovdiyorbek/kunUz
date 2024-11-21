@@ -7,17 +7,21 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-public class ArticleTag {
+public class SavedArticle {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
-    private String tag;
-
-    @Column(name = "article_Id", nullable = false)
+    @Column(name = "article_id", nullable = false)
     private String articleId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", insertable = false, updatable = false)
     private Article article;
+
+    @Column(name = "profile_id" , nullable = false)
+    private Integer profileId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id", insertable = false, updatable = false)
+    private Profile profile;
+
 }

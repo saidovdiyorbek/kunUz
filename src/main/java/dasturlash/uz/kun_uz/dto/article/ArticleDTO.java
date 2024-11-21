@@ -20,5 +20,8 @@ public class ArticleDTO {
     private Integer region_id;
     private Integer category_id;
     private List<Integer> articleTypesList;
+    private String urlLike;
+    private String urlDislike;
+
 
 }

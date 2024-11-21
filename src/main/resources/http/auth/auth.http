@@ -4,7 +4,7 @@ Content-Type: application/json
 {
   "surname": "Joni",
   "name": "Jonibek",
-  "email": "diyoree090@gmail.com",
+  "email": "diyoree090303030@gmail.com",
   "password": "onetwofive6"
 }
 
@@ -36,9 +36,10 @@ Content-Type: application/json
 ###
 POST localhost:8080/auth/login
 Content-Type: application/json
+Accept-Language:
 
 {
-  "email": "massaDumba",
+  "email": "massaDdumba",
   "password": "1234567"
 }
 

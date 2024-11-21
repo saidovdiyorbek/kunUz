@@ -81,5 +81,11 @@ public class Article {
     @Column
     private Integer viewCount;
 
+    @Column
+    private Integer likeCount = 0;
+
+    @Column
+    private Integer dislikeCount = 0;
+
 
 }
